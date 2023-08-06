@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:tcp://localhost/~/echome
+    username: sa
+    password:
+
+  h2:
+    console:
+      path: /h2-console
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    #    generate-ddl: true
+    defer-datasource-initialization: true #data.sql ???? ?? ??
+  sql:
+    init:
+      mode: always #data.sql ???? ?? ??
+#  config:
+#    import: application-key.yml
+
+
