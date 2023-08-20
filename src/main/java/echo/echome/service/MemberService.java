@@ -21,5 +21,5 @@ public interface MemberService {
      */
     void writeAnswerToQuestions(List<ReqAnswersToQues> request, Long memberId);
 
-//    List<ResAllAnswers> getAllAnswers(Long memberId);
+    List<ResAllAnswers> getAllAnswers(Long memberId);
 }

@@ -32,12 +32,10 @@ public class MemberServiceImpl implements MemberService{
                 .build();
         memberRepository.save(member);
 
-        ResCreateMember returnValue = ResCreateMember.builder()
+        return ResCreateMember.builder()
                 .email(member.getEmail())
                 .name(member.getName())
                 .build();
-
-        return returnValue;
     }
 
     @Override
@@ -45,9 +43,8 @@ public class MemberServiceImpl implements MemberService{
         answerService.makeAnswerToQuestions(request,memberId);
     }
 
-//    @Override
-//    public List<ResAllAnswers> getAllAnswers(Long memberId) {
-//        answerService.getAllAnswersByMemberId(memberId)
-//        return null;
-//    }
+    @Override
+    public List<ResAllAnswers> getAllAnswers(Long memberId) {
+        return answerService.getAllAnswersByMemberId(memberId);
+    }
 }
