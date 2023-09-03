@@ -16,35 +16,40 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/members")
-@CrossOrigin
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080"}, allowCredentials = "true")
 public class MemberController {
 
     private final MemberService memberService;
     private final Environment env;
+
     @GetMapping("/health_check")
-    public String check(){
+    public String check() {
         return "It's starting on Port " + env.getProperty("local.server.port").toString();
     }
 
 
     @PostMapping("/create")
-    public ResponseEntity<ResCreateMember> createNewMem(@RequestBody ReqCreateMember request){
+    public ResponseEntity<ResCreateMember> createNewMem(@RequestBody ReqCreateMember request) {
         ResCreateMember response = memberService.createNewMember(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
 
-
     @PostMapping("/answers/{memberId}")
-    public ResponseEntity<?> writeAnswers(@PathVariable("memberId")Long memberId,
-                                       @RequestBody List<ReqAnswersToQues> request){
-        memberService.writeAnswerToQuestions(request,memberId);
+    public ResponseEntity<?> writeAnswers(@PathVariable("memberId") Long memberId,
+                                          @RequestBody List<ReqAnswersToQues> request) {
+        memberService.writeAnswerToQuestions(request, memberId);
+
         return ResponseEntity.status(HttpStatus.OK).body(memberId);
     }
 
     @GetMapping("/answers/{memberId}")
-    public ResponseEntity<?> getAllAnswersOfMember(@PathVariable("memberId") Long memberId){
+    public ResponseEntity<String> getAllAnswersOfMember(@PathVariable("memberId") Long memberId) {
         List<ResAllAnswers> returnValue = memberService.getAllAnswers(memberId);
-        return ResponseEntity.status(HttpStatus.OK).body(returnValue);
+
+        String context = memberService.makeContext(returnValue);
+
+        //return ResponseEntity.status(HttpStatus.OK).body(context);
+        return ResponseEntity.ok().body("{\"context\": \"" + context + "\"}");
     }
 }

@@ -22,4 +22,6 @@ public interface MemberService {
     void writeAnswerToQuestions(List<ReqAnswersToQues> request, Long memberId);
 
     List<ResAllAnswers> getAllAnswers(Long memberId);
+
+    String makeContext(List<ResAllAnswers> listOfAnswer);
 }
