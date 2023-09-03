@@ -47,4 +47,16 @@ public class MemberServiceImpl implements MemberService{
     public List<ResAllAnswers> getAllAnswers(Long memberId) {
         return answerService.getAllAnswersByMemberId(memberId);
     }
+
+    @Override
+    public String makeContext(List<ResAllAnswers> listOfAnswer) {
+        String context = "";
+        int cnt = 1;
+        for (ResAllAnswers resAllAnswers : listOfAnswer) {
+            context += cnt+ ". " + resAllAnswers.getQuestion() + "라는 질문에 대한 대답은 " +resAllAnswers.getAnswer()+", ";
+            cnt++;
+        }
+        return context;
+    }
+
 }
