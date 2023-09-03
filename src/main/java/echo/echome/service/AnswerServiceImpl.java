@@ -5,6 +5,8 @@ import echo.echome.dto.ResAllAnswers;
 import echo.echome.entity.Answer;
 import echo.echome.entity.Member;
 import echo.echome.entity.Question;
+import echo.echome.exception.AppException;
+import echo.echome.exception.ErrorCode;
 import echo.echome.repository.AnswerRepository;
 import echo.echome.repository.MemberRepository;
 import echo.echome.repository.QuestionRepository;
@@ -27,16 +29,17 @@ public class AnswerServiceImpl implements AnswerService{
     @Override
     public void makeAnswerToQuestions(List<ReqAnswersToQues> answersToQues,Long memberId) {
 
-
         for (ReqAnswersToQues reqAnswersToQues :answersToQues) {
-            Optional<Question> quesOpt = questionRepository.findById(reqAnswersToQues.getQuesId());
-            Question ques = quesOpt.get();
-            Optional<Member> memberOpt = memberRepository.findById(memberId);
-            Member member = memberOpt.get();
+            Question question = questionRepository.findById(reqAnswersToQues.getQuesId())
+                    .orElseThrow(() -> new AppException(ErrorCode.QUESTION_NOT_FOUND));
+
+            Member findMember = memberRepository.findById(memberId)
+                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
             Answer answer = Answer.builder()
-                    .question(ques)
+                    .question(question)
                     .content(reqAnswersToQues.getContent())
-                    .member(member)
+                    .member(findMember)
                     .build();
             answerRepository.save(answer);
         }
