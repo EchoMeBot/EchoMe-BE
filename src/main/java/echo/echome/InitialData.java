@@ -40,8 +40,8 @@ public class InitialData {
         private final QuestionRepository questionRepository;
         private final AnswerRepository answerRepository;
         public void dbInit() {
-            ReqCreateMember rm = new ReqCreateMember("lcy923@naver.com", "이채영", "1111", "12341234123");
-            memberService.createNewMember(rm);
+//            ReqCreateMember rm = new ReqCreateMember("lcy923@naver.com", "이채영", "1111", "12341234123");
+//            memberService.createNewMember(rm);
 
            /* List<ReqAnswersToQues> answersToQues = new ArrayList<>();
 

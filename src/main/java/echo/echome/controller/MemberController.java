@@ -1,11 +1,13 @@
 package echo.echome.controller;
 
-import echo.echome.dto.ReqAnswersToQues;
-import echo.echome.dto.ReqCreateMember;
-import echo.echome.dto.ResAllAnswers;
-import echo.echome.dto.ResCreateMember;
+import echo.echome.dto.*;
 import echo.echome.service.MemberService;
+import echo.echome.utils.Token;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/members")
@@ -29,9 +32,26 @@ public class MemberController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<ResCreateMember> createNewMem(@RequestBody ReqCreateMember request) {
+    public ResponseEntity<ResCreateMember> createNewMem(@RequestBody @Valid ReqCreateMember request) {
         ResCreateMember response = memberService.createNewMember(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody @Valid ReqMemberLogin reqMemberLogin,
+        HttpServletResponse httpServletResponse){
+
+        Token token = memberService.login(reqMemberLogin.getEmail(),reqMemberLogin.getPassword());
+        httpServletResponse.addHeader("accessToken",token.getAccessToken());
+
+        Cookie cookie = new Cookie("refreshToken", token.getRefreshToken());
+        cookie.setPath("/");
+        cookie.setMaxAge(3000000);
+        cookie.isHttpOnly();
+        cookie.setSecure(true);
+
+        httpServletResponse.addCookie(cookie);
+        return ResponseEntity.ok().body("로그인에 성공했습니다.");
     }
 
 
@@ -52,4 +72,6 @@ public class MemberController {
         //return ResponseEntity.status(HttpStatus.OK).body(context);
         return ResponseEntity.ok().body("{\"context\": \"" + context + "\"}");
     }
+
+
 }

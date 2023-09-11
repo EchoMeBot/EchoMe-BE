@@ -1,20 +1,20 @@
 package echo.echome.service;
 
-import echo.echome.dto.ReqAnswersToQues;
-import echo.echome.dto.ReqCreateMember;
-import echo.echome.dto.ResAllAnswers;
-import echo.echome.dto.ResCreateMember;
+import echo.echome.dto.*;
+import echo.echome.utils.Token;
 
 import java.util.List;
 
 public interface MemberService {
 
     /**
-     * 회원 생성
+     * 회원 가입
      * @param newMember
      * @return
      */
     ResCreateMember createNewMember(ReqCreateMember newMember);
+
+    Token login(String email, String password);
 
     /**
      *

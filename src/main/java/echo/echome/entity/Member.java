@@ -3,7 +3,9 @@ package echo.echome.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 
 @Entity
 @Getter
@@ -32,4 +34,18 @@ public class Member {
 
     @Column(name = "member_createdAt")
     private LocalDateTime createdAt;
+
+    @Column(name = "refreshToken")
+    private String refreshToken;
+
+
+    public void updateRefreshToken(String refreshToken){
+        this.refreshToken = refreshToken;
+    }
+
+    public void inValidRefreshToken() {
+        this.refreshToken = null;
+    }
+    // 나이 계산
+
 }
