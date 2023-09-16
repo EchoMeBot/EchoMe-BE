@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/members")
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080"}, allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080"})
 public class MemberController {
 
     private final MemberService memberService;
@@ -63,14 +63,20 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(memberId);
     }
 
+//    @GetMapping("/answers/{memberId}")
+//    public ResponseEntity<String> getAllAnswersOfMember(@PathVariable("memberId") Long memberId) {
+//        List<ResAllAnswers> returnValue = memberService.getAllAnswers(memberId);
+//
+//        String context = memberService.makeContext(returnValue);
+//
+//        //return ResponseEntity.status(HttpStatus.OK).body(context);
+//        return ResponseEntity.ok().body("{\"context\": \"" + context + "\"}");
+//    }
+
     @GetMapping("/answers/{memberId}")
-    public ResponseEntity<String> getAllAnswersOfMember(@PathVariable("memberId") Long memberId) {
-        List<ResAllAnswers> returnValue = memberService.getAllAnswers(memberId);
-
-        String context = memberService.makeContext(returnValue);
-
-        //return ResponseEntity.status(HttpStatus.OK).body(context);
-        return ResponseEntity.ok().body("{\"context\": \"" + context + "\"}");
+    public ResponseEntity<?> getAllAnswersByMemberId(@PathVariable("memberId") Long memberId){
+        List<ResAllAnswers> allAnswersByMemberId = memberService.getAllAnswersByMemberId(memberId);
+        return ResponseEntity.status(HttpStatus.OK).body(allAnswersByMemberId);
     }
 
 
