@@ -36,8 +36,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 				new AntPathRequestMatcher("/v1/members/reissue")
 				//todo. 공고 리스트 페이지 추가 허용
 //				PathRequest.toH2Console()
-			)
-				.permitAll()
+			).permitAll()
 			.anyRequest().authenticated()
 			.and()
 			.headers().frameOptions().sameOrigin().and()

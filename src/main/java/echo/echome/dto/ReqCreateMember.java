@@ -24,7 +24,7 @@ public class ReqCreateMember {
 
     @NotBlank(message = "Password should not be blank")
     @Size(min = 8,message = "Password should be at least 8 character")
-    private String pwd;
+    private String password;
 
     @NotBlank(message = "PhoneNum should not be blank")
     @Size(min = 3,message = "PhoneNum should be at least 3 character")
