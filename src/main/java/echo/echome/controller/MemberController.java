@@ -60,7 +60,7 @@ public class MemberController {
                                           @RequestBody List<ReqAnswersToQues> request) {
         memberService.writeAnswerToQuestions(request, memberId);
 
-        return ResponseEntity.status(HttpStatus.OK).body(memberId);
+        return ResponseEntity.status(HttpStatus.OK).body("답변이 정상적으로 등록되었습니다.");
     }
 
 //    @GetMapping("/answers/{memberId}")

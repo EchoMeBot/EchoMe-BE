@@ -2,6 +2,7 @@ package echo.echome;
 
 import echo.echome.dto.ReqAnswersToQues;
 import echo.echome.dto.ReqCreateMember;
+import echo.echome.dto.ReqNewQuestion;
 import echo.echome.entity.Answer;
 import echo.echome.entity.Member;
 import echo.echome.entity.Question;
@@ -11,12 +12,14 @@ import echo.echome.repository.QuestionRepository;
 import echo.echome.service.AnswerService;
 import echo.echome.service.AnswerServiceImpl;
 import echo.echome.service.MemberServiceImpl;
+import echo.echome.service.QuestionService;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,10 +41,23 @@ public class InitialData {
         private final MemberServiceImpl memberService;
         private final MemberRepository memberRepository;
         private final QuestionRepository questionRepository;
+        private final QuestionService questionService;
         private final AnswerRepository answerRepository;
         public void dbInit() {
 //            ReqCreateMember rm = new ReqCreateMember("lcy923@naver.com", "이채영", "1111", "12341234123");
 //            memberService.createNewMember(rm);
+            List<ReqNewQuestion> questionList = Arrays.asList(
+                    new ReqNewQuestion(1L,"좋아하는 음식이 뭐야?"),
+                    new ReqNewQuestion(2L,"좋아하는 음악이 뭐야?"),
+                    new ReqNewQuestion(3L,"취미가 뭐야?"),
+                    new ReqNewQuestion(4L,"키가 몇이야?"),
+                    new ReqNewQuestion(5L,"몇 살이야?")
+
+            );
+
+            for (ReqNewQuestion request : questionList) {
+                questionService.addQuestion(request.getQuesNumber(),request.getQuestionContent());
+            }
 
            /* List<ReqAnswersToQues> answersToQues = new ArrayList<>();
 

@@ -16,7 +16,7 @@ public class Question {
     @Column(name = "ques_id")
     private Long id;
 
-    @Column(name = "ques_num")
+    @Column(name = "ques_num",unique = true)
     private Long quesNum;
     @Column(name = "ques_content")
     private String content;

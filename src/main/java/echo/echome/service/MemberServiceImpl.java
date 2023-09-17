@@ -1,10 +1,14 @@
 package echo.echome.service;
 
 import echo.echome.dto.*;
+import echo.echome.entity.Answer;
 import echo.echome.entity.Member;
+import echo.echome.entity.Question;
 import echo.echome.exception.AppException;
 import echo.echome.exception.ErrorCode;
+import echo.echome.repository.AnswerRepository;
 import echo.echome.repository.MemberRepository;
+import echo.echome.repository.QuestionRepository;
 import echo.echome.utils.JwtUtil;
 import echo.echome.utils.Token;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,6 +26,8 @@ import java.util.List;
 public class MemberServiceImpl implements MemberService{
 
     private final MemberRepository memberRepository;
+    private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
     private final AnswerService answerService;
     private final BCryptPasswordEncoder encoder;
     private final JwtUtil jwtUtil;
@@ -36,7 +43,7 @@ public class MemberServiceImpl implements MemberService{
         Member member = Member.builder()
                 .name(newMember.getName())
                 .email(newMember.getEmail())
-                .encryptedPwd(encoder.encode(newMember.getPwd()))
+                .encryptedPwd(encoder.encode(newMember.getPassword()))
                 .phoneNum(newMember.getPhoneNum())
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -74,13 +81,39 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public String makeContext(List<ResAllAnswers> listOfAnswer) {
-        String context = "";
+        StringBuilder context = new StringBuilder();
         int cnt = 1;
         for (ResAllAnswers resAllAnswers : listOfAnswer) {
-            context += cnt+ ". " + resAllAnswers.getQuestion() + "라는 질문에 대한 대답은 " +resAllAnswers.getAnswer()+", ";
+            context.append(cnt).append(". ").append(resAllAnswers.getQuestion()).append("라는 질문에 대한 대답은 ").append(resAllAnswers.getAnswer()).append(", ");
             cnt++;
         }
-        return context;
+        return context.toString();
     }
 
+    @Override
+    public List<ResAllAnswers> getAllAnswersByMemberId(Long memberId) {
+        List<ResAllAnswers> result = new ArrayList<>();
+        List<Answer> allAnswersFromMember = answerRepository.findAllByMemberId(memberId);
+        List<Question> allQuestions = questionRepository.findAll();
+        for (Question questions: allQuestions) {
+
+            ResAllAnswers noReply = ResAllAnswers.builder()
+                    .quesNum(questions.getQuesNum())
+                    .question(questions.getContent())
+                    .answer("")
+                    .build();
+
+            ResAllAnswers ResAnswer = allAnswersFromMember.stream()
+                    .filter(answer -> answer.getId().equals(questions.getId()))
+                    .map(answer -> ResAllAnswers.builder()
+                            .answer(answer.getContent())
+                            .quesNum(questions.getQuesNum())
+                            .question(questions.getContent())
+                            .build())
+                    .findAny()
+                    .orElse(noReply);
+            result.add(ResAnswer);
+        }
+        return result;
+    }
 }

@@ -28,4 +28,5 @@ public class Answer {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
 }

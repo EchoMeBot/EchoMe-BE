@@ -11,4 +11,6 @@ public interface QuestionService {
      * @return 등록된 모든 질문리스트
      */
     List<ResAllQuestion> getAllQuestions();
+
+    Long addQuestion(Long number, String content);
 }

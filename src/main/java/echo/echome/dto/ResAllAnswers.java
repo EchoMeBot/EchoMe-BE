@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResAllAnswers {
 
+    private Long quesNum; //질문 번호
     private String question;
     private String answer;
 }

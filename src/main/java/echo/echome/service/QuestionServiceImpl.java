@@ -2,6 +2,8 @@ package echo.echome.service;
 
 import echo.echome.dto.ResAllQuestion;
 import echo.echome.entity.Question;
+import echo.echome.exception.AppException;
+import echo.echome.exception.ErrorCode;
 import echo.echome.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,5 +32,22 @@ public class QuestionServiceImpl implements QuestionService{
 
         }
         return allResQuestions;
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public Long addQuestion(Long number, String content) {
+
+        questionRepository.findByQuesNum(number)
+                .ifPresent(question->{
+                     throw new AppException(ErrorCode.QUESTION_NUMBER_DUPLICATED);
+        });
+
+        Question newQuestion = Question.builder()
+                .quesNum(number)
+                .content(content)
+                .build();
+        questionRepository.save(newQuestion);
+        return newQuestion.getId();
     }
 }

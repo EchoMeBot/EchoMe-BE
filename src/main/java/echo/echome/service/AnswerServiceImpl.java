@@ -26,10 +26,17 @@ public class AnswerServiceImpl implements AnswerService{
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
     private final MemberRepository memberRepository;
+
+    /**
+     * 질문 리스트 -> 질문 id, 질문 내용이
+     * @param answersToQues: <질문 id, 답변 내용>의 리스트
+     * @param memberId
+     */
     @Override
     public void makeAnswerToQuestions(List<ReqAnswersToQues> answersToQues,Long memberId) {
 
         for (ReqAnswersToQues reqAnswersToQues :answersToQues) {
+
             Question question = questionRepository.findById(reqAnswersToQues.getQuesId())
                     .orElseThrow(() -> new AppException(ErrorCode.QUESTION_NOT_FOUND));
 
@@ -53,14 +60,14 @@ public class AnswerServiceImpl implements AnswerService{
         List<ResAllAnswers> returnValue = new ArrayList<>();
 
         for (Answer answer : allAnswerByMemberId){
-            Question question = questionRepository.findById(answer.getQuestion().getId()).get();
+            Question question = questionRepository.findById(answer.getQuestion().getId())
+                    .orElseThrow(()->new AppException(ErrorCode.QUESTION_NOT_FOUND));
             ResAllAnswers resAns = ResAllAnswers.builder()
                     .answer(answer.getContent())
                     .question(question.getContent())
                     .build();
             returnValue.add(resAns);
         }
-
 
         return returnValue;
     }
