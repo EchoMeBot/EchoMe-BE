@@ -104,7 +104,7 @@ public class MemberServiceImpl implements MemberService{
                     .build();
 
             ResAllAnswers ResAnswer = allAnswersFromMember.stream()
-                    .filter(answer -> answer.getId().equals(questions.getId()))
+                    .filter(answer -> answer.getQuestion().getId().equals(questions.getId()))
                     .map(answer -> ResAllAnswers.builder()
                             .answer(answer.getContent())
                             .quesNum(questions.getQuesNum())
