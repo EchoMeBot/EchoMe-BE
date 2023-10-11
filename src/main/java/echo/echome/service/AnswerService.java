@@ -19,4 +19,6 @@ public interface AnswerService {
      * @return <질문,답변> 리스트
      */
     List<ResAllAnswers> getAllAnswersByMemberId(Long memberId);
+
+    void answerOneQuestion(String accessToken, Long quesId,String answerContent);
 }

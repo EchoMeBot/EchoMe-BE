@@ -10,7 +10,9 @@ import echo.echome.exception.ErrorCode;
 import echo.echome.repository.AnswerRepository;
 import echo.echome.repository.MemberRepository;
 import echo.echome.repository.QuestionRepository;
+import echo.echome.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,11 +23,13 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class AnswerServiceImpl implements AnswerService{
 
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
     private final MemberRepository memberRepository;
+    private final JwtUtil jwtUtil;
 
     /**
      * 질문 리스트 -> 질문 id, 질문 내용이
@@ -43,11 +47,14 @@ public class AnswerServiceImpl implements AnswerService{
             Member findMember = memberRepository.findById(memberId)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
+            //todo answer를 build할때, memberId, quesId쌍이 Unique하도록 되도록
+
             Answer answer = Answer.builder()
                     .question(question)
                     .content(reqAnswersToQues.getContent())
                     .member(findMember)
                     .build();
+
             answerRepository.save(answer);
         }
     }
@@ -70,5 +77,27 @@ public class AnswerServiceImpl implements AnswerService{
         }
 
         return returnValue;
+    }
+
+    @Override
+    public void answerOneQuestion(String accessToken, Long quesId,String answerContent) {
+        String email = jwtUtil.getEmail(accessToken);
+        Member findMember = memberRepository.findByEmail(email)
+                .orElseThrow(()->new AppException(ErrorCode.EMAIL_NOT_FOUND));
+        log.info("findMember: {}",findMember.getName());
+        Question findQuestion = questionRepository.findById(quesId)
+                .orElseThrow(()->new AppException(ErrorCode.QUESTION_NOT_FOUND));
+        log.info("findQuestion: {}",findQuestion.getContent());
+
+        Answer answer = Answer.builder()
+                .question(findQuestion)
+                .member(findMember)
+                .content(answerContent)
+                .build();
+
+        //todo 중복저장 방지해야함.
+        log.info("postedAnswer: {}",answer.getId());
+        answerRepository.save(answer);
+
     }
 }

@@ -7,7 +7,9 @@ import static jakarta.persistence.FetchType.*;
 
 @Entity
 @Getter
-@Table(name = "answer")
+@Table(name = "answer", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"ques_id", "member_id"})
+})
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder

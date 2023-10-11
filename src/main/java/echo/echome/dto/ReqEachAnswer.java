@@ -5,13 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class ResAllQuestion {
-
+public class ReqEachAnswer implements Serializable {
     private Long quesId;
-    private String content;
-    private Long quesNum;
+    private String answer;
 }

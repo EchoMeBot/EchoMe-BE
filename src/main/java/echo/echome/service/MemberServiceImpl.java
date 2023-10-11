@@ -12,6 +12,7 @@ import echo.echome.repository.QuestionRepository;
 import echo.echome.utils.JwtUtil;
 import echo.echome.utils.Token;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,10 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class MemberServiceImpl implements MemberService{
 
     private final MemberRepository memberRepository;
@@ -31,7 +34,6 @@ public class MemberServiceImpl implements MemberService{
     private final AnswerService answerService;
     private final BCryptPasswordEncoder encoder;
     private final JwtUtil jwtUtil;
-
 
     @Override
     public ResCreateMember createNewMember(ReqCreateMember newMember) {
@@ -70,7 +72,12 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public void writeAnswerToQuestions(List<ReqAnswersToQues> request, Long memberId) {
+    public void writeAnswerToQuestions(List<ReqAnswersToQues> request, String accessToken) {
+        String email = jwtUtil.getEmail(accessToken);
+        Member findMember = memberRepository.findByEmail(email)
+                .orElseThrow(()->new AppException(ErrorCode.EMAIL_NOT_FOUND));
+        Long memberId = findMember.getId();
+
         answerService.makeAnswerToQuestions(request,memberId);
     }
 
@@ -91,14 +98,19 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public List<ResAllAnswers> getAllAnswersByMemberId(Long memberId) {
+    public List<ResAllAnswers> getAllAnswersByMemberId(String accessToken) {
         List<ResAllAnswers> result = new ArrayList<>();
+        String email = jwtUtil.getEmail(accessToken);
+        Member findMember = memberRepository.findByEmail(email)
+                .orElseThrow(()->new AppException(ErrorCode.EMAIL_NOT_FOUND));
+        Long memberId = findMember.getId();
+
         List<Answer> allAnswersFromMember = answerRepository.findAllByMemberId(memberId);
         List<Question> allQuestions = questionRepository.findAll();
         for (Question questions: allQuestions) {
 
             ResAllAnswers noReply = ResAllAnswers.builder()
-                    .quesNum(questions.getQuesNum())
+                    .quesId(questions.getId())
                     .question(questions.getContent())
                     .answer("")
                     .build();
@@ -107,7 +119,7 @@ public class MemberServiceImpl implements MemberService{
                     .filter(answer -> answer.getQuestion().getId().equals(questions.getId()))
                     .map(answer -> ResAllAnswers.builder()
                             .answer(answer.getContent())
-                            .quesNum(questions.getQuesNum())
+                            .quesId(questions.getId())
                             .question(questions.getContent())
                             .build())
                     .findAny()
@@ -115,5 +127,11 @@ public class MemberServiceImpl implements MemberService{
             result.add(ResAnswer);
         }
         return result;
+    }
+
+    @Override
+    public void answerToOneQuestion(String accessToken, ReqEachAnswer request) {
+        log.info("request: {}",request.getQuesId());
+        answerService.answerOneQuestion(accessToken,request.getQuesId(), request.getAnswer());
     }
 }
