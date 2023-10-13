@@ -25,6 +25,7 @@ public class QuestionServiceImpl implements QuestionService{
         List<ResAllQuestion> allResQuestions = new ArrayList<>();
         for (Question question: allQuestions) {
             ResAllQuestion quesDto = ResAllQuestion.builder()
+                    .quesId(question.getId())
                     .content(question.getContent())
                     .quesNum(question.getQuesNum())
                     .build();

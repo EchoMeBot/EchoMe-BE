@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResAllAnswers {
 
-    private Long quesNum; //질문 번호
-    private String question;
-    private String answer;
+    private Long quesId; //질문 PK
+    private String question;//질문 내용
+    private String answer;//해당 질문에 회원이 한 답변
 }
