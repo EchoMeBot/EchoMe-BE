@@ -38,6 +38,8 @@ public class MemberServiceImpl implements MemberService{
     private final BCryptPasswordEncoder encoder;
     private final JwtUtil jwtUtil;
 
+    private static final String EMPTY_STRING = "";
+
     @Override
     public ResCreateMember createNewMember(ReqCreateMember newMember) {
         memberRepository.findByEmail(newMember.getEmail())
@@ -54,6 +56,15 @@ public class MemberServiceImpl implements MemberService{
                 .build();
         memberRepository.save(member);
 
+        List<Question> allQuestion = questionRepository.findAll();
+        for (Question ques : allQuestion){
+            Answer answer = Answer.builder()
+                    .content(EMPTY_STRING)
+                    .member(member)
+                    .question(ques)
+                    .build();
+            answerRepository.save(answer);
+        }
         return ResCreateMember.builder()
                 .email(member.getEmail())
                 .name(member.getName())
