@@ -1,7 +1,8 @@
 package echo.echome.service;
 
 import echo.echome.dto.ReqCreateMember;
-import echo.echome.dto.ReqEachAnswer;
+import echo.echome.dto.ReqMemberChat;
+import echo.echome.dto.ReqUpdateMember;
 import echo.echome.dto.ResAllAnswers;
 import echo.echome.dto.ResCreateMember;
 import echo.echome.dto.ResMemberInfo;
@@ -30,14 +31,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class MemberServiceImpl implements MemberService{
 
+    private static final String EMPTY_STRING = "";
     private final MemberRepository memberRepository;
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
     private final AnswerService answerService;
     private final BCryptPasswordEncoder encoder;
     private final JwtUtil jwtUtil;
-
-    private static final String EMPTY_STRING = "";
 
     @Override
     public ResCreateMember createNewMember(ReqCreateMember newMember) {
@@ -114,28 +114,31 @@ public class MemberServiceImpl implements MemberService{
             throw new AppException(ErrorCode.AUTHORIZATION_ERROR);
         }
     }
-
-    @Override
-    public void writeAnswerToQuestions(List<ReqAnswersToQues> request, String accessToken) {
-        String email = jwtUtil.getEmail(accessToken);
-        Member findMember = memberRepository.findByEmail(email)
-                .orElseThrow(()->new AppException(ErrorCode.EMAIL_NOT_FOUND));
-        Long memberId = findMember.getId();
-
-        answerService.makeAnswerToQuestions(request,memberId);
-    }
-
     @Override
     public List<ResAllAnswers> getAllAnswers(Long memberId) {
         return answerService.getAllAnswersByMemberId(memberId);
     }
 
     @Override
-    public String makeContext(List<ResAllAnswers> listOfAnswer) {
+    public String makeContext(ReqMemberChat request) {
         StringBuilder context = new StringBuilder();
+
+        List<Answer> allAnswer = answerRepository.findAllByMemberId(request.getMemberId());
+
         int cnt = 1;
-        for (ResAllAnswers resAllAnswers : listOfAnswer) {
-            context.append(cnt).append(". ").append(resAllAnswers.getQuestion()).append("라는 질문에 대한 대답은 ").append(resAllAnswers.getAnswer()).append(", ");
+        for (Answer answer : allAnswer){
+            Question findQuestion = answer.getQuestion();
+            String memberAnswer = "";
+            if (EMPTY_STRING.equals(answer.getContent())){
+                memberAnswer = "미응답 상태";
+            }
+            else {
+                memberAnswer = answer.getContent();
+            }
+            String contextItem = cnt + ". "+ findQuestion.getContent()+"라는 질문에 대한 답은 "+memberAnswer+"\n";
+            log.info("추가된 답변 : {}",contextItem);
+            context.append(contextItem);
+
             cnt++;
         }
         return context.toString();

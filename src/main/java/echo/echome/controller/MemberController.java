@@ -69,13 +69,11 @@ public class MemberController {
         return ResponseEntity.ok("회원 정보 업데이트 완료.");
     }
 
-    @PostMapping("/answer")
-    public ResponseEntity<?> answerOneQuestion(@RequestHeader("Authorization") String authorizationToken,
-                                               @RequestBody ReqEachAnswer request ){
-        String accessToken = authorizationToken.replace("Bearer ","");
-        memberService.answerToOneQuestion(accessToken, request);
-        log.info("request: {}",request.getAnswer());
-        return ResponseEntity.status(HttpStatus.OK).body("답변이 정상적으로 등록되었습니다.");
+    @GetMapping("/chat")
+    public ResponseEntity<String> getAllAnswersOfMember(@RequestBody ReqMemberChat request) {
+
+        String context = memberService.makeContext(request);
+        return ResponseEntity.ok().body("{\"context\": \"" + context + "\"}");
     }
 
     @GetMapping("/answers")
