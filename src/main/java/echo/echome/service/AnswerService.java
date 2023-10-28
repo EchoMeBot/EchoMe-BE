@@ -1,6 +1,7 @@
 package echo.echome.service;
 
 import echo.echome.dto.ReqAnswersToQues;
+import echo.echome.dto.ReqEachAnswer;
 import echo.echome.dto.ResAllAnswers;
 
 import java.util.List;
@@ -20,5 +21,7 @@ public interface AnswerService {
      */
     List<ResAllAnswers> getAllAnswersByMemberId(Long memberId);
 
-    void answerOneQuestion(String accessToken, Long quesId,String answerContent);
+//    void answerOneQuestion(String accessToken, Long quesId,String answerContent);
+
+    void updateAnswer(ReqEachAnswer request);
 }

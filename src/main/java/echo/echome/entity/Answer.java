@@ -23,12 +23,16 @@ public class Answer {
     @Column(name = "ans_content")
     private String content;
 
-    @OneToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "ques_id")
     private Question question;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public void updateAnswer(String content){
+        this.content = content;
+    }
 
 }

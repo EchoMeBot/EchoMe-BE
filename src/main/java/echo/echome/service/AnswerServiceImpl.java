@@ -80,24 +80,12 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public void answerOneQuestion(String accessToken, Long quesId,String answerContent) {
-        String email = jwtUtil.getEmail(accessToken);
-        Member findMember = memberRepository.findByEmail(email)
-                .orElseThrow(()->new AppException(ErrorCode.EMAIL_NOT_FOUND));
-        log.info("findMember: {}",findMember.getName());
-        Question findQuestion = questionRepository.findById(quesId)
-                .orElseThrow(()->new AppException(ErrorCode.QUESTION_NOT_FOUND));
-        log.info("findQuestion: {}",findQuestion.getContent());
-
-        Answer answer = Answer.builder()
-                .question(findQuestion)
-                .member(findMember)
-                .content(answerContent)
-                .build();
-
-        //todo 중복저장 방지해야함.
-        log.info("postedAnswer: {}",answer.getId());
-        answerRepository.save(answer);
-
+    public void updateAnswer(ReqEachAnswer request) {
+        Answer findAnswer = answerRepository.findByMemberIdAndQuestionId(request.getMemberId(),
+                request.getQuesId())
+                .orElseThrow(()->new AppException(ErrorCode.ANSWER_NOT_FOUNT));
+        findAnswer.updateAnswer(request.getAnswer());
+        log.info("answer Content: {}",findAnswer.getContent());
+        answerRepository.save(findAnswer);
     }
 }
