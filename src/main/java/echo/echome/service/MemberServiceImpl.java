@@ -1,6 +1,11 @@
 package echo.echome.service;
 
-import echo.echome.dto.*;
+import echo.echome.dto.ReqAnswersToQues;
+import echo.echome.dto.ReqCreateMember;
+import echo.echome.dto.ReqEachAnswer;
+import echo.echome.dto.ResAllAnswers;
+import echo.echome.dto.ResCreateMember;
+import echo.echome.dto.ResMemberInfo;
 import echo.echome.entity.Answer;
 import echo.echome.entity.Member;
 import echo.echome.entity.Question;
@@ -11,16 +16,14 @@ import echo.echome.repository.MemberRepository;
 import echo.echome.repository.QuestionRepository;
 import echo.echome.utils.JwtUtil;
 import echo.echome.utils.Token;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -69,6 +72,18 @@ public class MemberServiceImpl implements MemberService{
         findeMember.updateRefreshToken(token.getRefreshToken());
         return token;
 
+    }
+
+    @Override
+    public ResMemberInfo getMemberInfo(String accessToken) {
+        String email = jwtUtil.getEmail(accessToken);
+        Member findMember = memberRepository.findByEmail(email)
+                .orElseThrow(()->new AppException(ErrorCode.EMAIL_NOT_FOUND));
+
+        return ResMemberInfo.builder()
+                .memberId(findMember.getId())
+                .name(findMember.getName())
+                .build();
     }
 
     @Override

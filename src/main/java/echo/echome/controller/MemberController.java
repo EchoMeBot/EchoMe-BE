@@ -4,13 +4,11 @@ import echo.echome.dto.*;
 import echo.echome.service.MemberService;
 import echo.echome.utils.Token;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,6 +52,13 @@ public class MemberController {
 
         httpServletResponse.addCookie(cookie);
         return ResponseEntity.ok().body("로그인에 성공했습니다.");
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<?> getMemberInfo(@RequestHeader("Auhorization") String authorizationHeader){
+        String accessToken = authorizationHeader.replace("Bearer ", "");
+        ResMemberInfo memberInfo = memberService.getMemberInfo(accessToken);
+        return ResponseEntity.ok(memberInfo);
     }
 
     //모든 질문에 한번에 대답하는 코드

@@ -16,6 +16,8 @@ public interface MemberService {
 
     Token login(String email, String password);
 
+    ResMemberInfo getMemberInfo(String accessToken);
+
     void writeAnswerToQuestions(List<ReqAnswersToQues> request, String accessToken);
     void answerToOneQuestion(String accessToken, ReqEachAnswer request);
 
