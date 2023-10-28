@@ -176,9 +176,4 @@ public class MemberServiceImpl implements MemberService{
         return result;
     }
 
-    @Override
-    public void answerToOneQuestion(String accessToken, ReqEachAnswer request) {
-        log.info("request: {}",request.getQuesId());
-        answerService.answerOneQuestion(accessToken,request.getQuesId(), request.getAnswer());
-    }
 }
