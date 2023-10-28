@@ -1,6 +1,5 @@
 package echo.echome.service;
 
-import echo.echome.dto.ReqAnswersToQues;
 import echo.echome.dto.ReqCreateMember;
 import echo.echome.dto.ReqEachAnswer;
 import echo.echome.dto.ResAllAnswers;
@@ -73,14 +72,14 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public Token login(String email, String password) {
-        Member findeMember = memberRepository.findByEmail(email)
+        Member findMember = memberRepository.findByEmail(email)
                 .orElseThrow(()-> new AppException(ErrorCode.EMAIL_NOT_FOUND));
 
-        if (!encoder.matches(password,findeMember.getEncryptedPwd())){
+        if (!encoder.matches(password,findMember.getEncryptedPwd())){
             throw new AppException(ErrorCode.INVALID_PASSWORD);
         }
         Token token = jwtUtil.createToken(email);
-        findeMember.updateRefreshToken(token.getRefreshToken());
+        findMember.updateRefreshToken(token.getRefreshToken());
         return token;
 
     }
@@ -93,6 +92,7 @@ public class MemberServiceImpl implements MemberService{
 
         return ResMemberInfo.builder()
                 .memberId(findMember.getId())
+                .email(email)
                 .name(findMember.getName())
                 .build();
     }
