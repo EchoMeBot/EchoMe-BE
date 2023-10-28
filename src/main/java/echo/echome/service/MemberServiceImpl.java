@@ -98,6 +98,24 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
+    public void updateMember(String accessToken, ReqUpdateMember request) {
+        Member findMemberById = memberRepository.findById(request.getMemberId())
+                .orElseThrow(()->new AppException(ErrorCode.USER_NOT_FOUND));
+        log.info("ById : {}",findMemberById);
+
+        String email = jwtUtil.getEmail(accessToken);
+        Member findMemberByEmail = memberRepository.findByEmail(email)
+                        .orElseThrow(()->new AppException(ErrorCode.EMAIL_NOT_FOUND));
+        log.info("ByEmail : {}",findMemberByEmail);
+        if (findMemberById.getId().equals(findMemberByEmail.getId())){
+            findMemberById.updateName(request.getName());
+            memberRepository.save(findMemberById);
+        }else {
+            throw new AppException(ErrorCode.AUTHORIZATION_ERROR);
+        }
+    }
+
+    @Override
     public void writeAnswerToQuestions(List<ReqAnswersToQues> request, String accessToken) {
         String email = jwtUtil.getEmail(accessToken);
         Member findMember = memberRepository.findByEmail(email)

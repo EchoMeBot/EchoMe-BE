@@ -61,14 +61,12 @@ public class MemberController {
         return ResponseEntity.ok(memberInfo);
     }
 
-    //모든 질문에 한번에 대답하는 코드
-    @PostMapping("/answers")
-    public ResponseEntity<?> writeAnswers(@RequestHeader("Authorization") String authorizationHeader,
-                                          @RequestBody List<ReqAnswersToQues> request) {
-        String accessToken = authorizationHeader.replace("Bearer ","");
-        memberService.writeAnswerToQuestions(request, accessToken);
-
-        return ResponseEntity.status(HttpStatus.OK).body("답변이 정상적으로 등록되었습니다.");
+    @PatchMapping("/update")
+    public ResponseEntity<?> updateMemberInfo(@RequestHeader("Authorization") String authorizationHeader,
+                                              @RequestBody ReqUpdateMember request){
+        String accessToken = authorizationHeader.replace("Bearer ", "");
+        memberService.updateMember(accessToken,request);
+        return ResponseEntity.ok("회원 정보 업데이트 완료.");
     }
 
     @PostMapping("/answer")

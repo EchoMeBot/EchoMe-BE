@@ -31,4 +31,6 @@ public interface MemberService {
      * @return
      */
     List<ResAllAnswers> getAllAnswersByMemberId(String accessToken);
+
+    void updateMember(String accessToken,ReqUpdateMember request);
 }
