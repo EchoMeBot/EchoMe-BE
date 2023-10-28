@@ -32,7 +32,7 @@ public class MemberController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<ResCreateMember> createNewMem(@RequestBody @Valid ReqCreateMember request) {
+    public ResponseEntity<ResCreateMember> createNewMember(@RequestBody @Valid ReqCreateMember request) {
         ResCreateMember response = memberService.createNewMember(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -78,16 +78,6 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body("답변이 정상적으로 등록되었습니다.");
     }
 
-//    @GetMapping("/answers/{memberId}")
-//    public ResponseEntity<String> getAllAnswersOfMember(@PathVariable("memberId") Long memberId) {
-//        List<ResAllAnswers> returnValue = memberService.getAllAnswers(memberId);
-//
-//        String context = memberService.makeContext(returnValue);
-//
-//        //return ResponseEntity.status(HttpStatus.OK).body(context);
-//        return ResponseEntity.ok().body("{\"context\": \"" + context + "\"}");
-//    }
-
     @GetMapping("/answers")
     public ResponseEntity<?> getAllAnswersByMemberId(@RequestHeader("Authorization") String authorizationHeader){
 
@@ -95,13 +85,5 @@ public class MemberController {
         List<ResAllAnswers> allAnswersByMemberId = memberService.getAllAnswersByMemberId(accessToken);
         return ResponseEntity.status(HttpStatus.OK).body(allAnswersByMemberId);
     }
-
-
-//    @GetMapping("/chat/{memberId}")
-//    public ResponseEntity<?> chatWithEcho(@PathVariable("memberId") Long memberId){
-//        memberService.getAllAnswersByMemberId()
-//        return ResponseEntity.status(HttpStatus.OK).body()
-//    }
-
 
 }

@@ -1,6 +1,7 @@
 package echo.echome.service;
 
 import echo.echome.dto.ReqAnswersToQues;
+import echo.echome.dto.ReqEachAnswer;
 import echo.echome.dto.ResAllAnswers;
 import echo.echome.entity.Answer;
 import echo.echome.entity.Member;
@@ -11,14 +12,12 @@ import echo.echome.repository.AnswerRepository;
 import echo.echome.repository.MemberRepository;
 import echo.echome.repository.QuestionRepository;
 import echo.echome.utils.JwtUtil;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -46,9 +45,6 @@ public class AnswerServiceImpl implements AnswerService{
 
             Member findMember = memberRepository.findById(memberId)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-
-            //todo answer를 build할때, memberId, quesId쌍이 Unique하도록 되도록
-
             Answer answer = Answer.builder()
                     .question(question)
                     .content(reqAnswersToQues.getContent())

@@ -18,9 +18,6 @@ public interface MemberService {
 
     ResMemberInfo getMemberInfo(String accessToken);
 
-    void writeAnswerToQuestions(List<ReqAnswersToQues> request, String accessToken);
-    void answerToOneQuestion(String accessToken, ReqEachAnswer request);
-
     List<ResAllAnswers> getAllAnswers(Long memberId);
 
     String makeContext(List<ResAllAnswers> listOfAnswer);

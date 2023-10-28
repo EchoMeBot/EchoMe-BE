@@ -19,13 +19,10 @@ public class QuestionController {
     private final QuestionService questionService;
 
 
-    @GetMapping("/getAllQuestions")
+    @GetMapping("")
     public List<ResAllQuestion> getAllQuestions() {
-
-        List<ResAllQuestion> questionList = questionService.getAllQuestions();
-
         //return ResponseEntity.status(HttpStatus.OK).body(context);
-        return questionList;
+        return questionService.getAllQuestions();
     }
 
 
