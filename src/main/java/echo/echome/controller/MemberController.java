@@ -43,7 +43,7 @@ public class MemberController {
 
         Token token = memberService.login(reqMemberLogin.getEmail(),reqMemberLogin.getPassword());
         httpServletResponse.addHeader("accessToken",token.getAccessToken());
-
+        ResMemberInfo memberInfo = memberService.getMemberInfo(token.getAccessToken());
         Cookie cookie = new Cookie("refreshToken", token.getRefreshToken());
         cookie.setPath("/");
         cookie.setMaxAge(3000000);
@@ -51,7 +51,7 @@ public class MemberController {
         cookie.setSecure(true);
 
         httpServletResponse.addCookie(cookie);
-        return ResponseEntity.ok().body("로그인에 성공했습니다.");
+        return ResponseEntity.ok().body(memberInfo);
     }
 
     @GetMapping("/info")
