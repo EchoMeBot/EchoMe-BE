@@ -1,7 +1,6 @@
 package echo.echome.service;
 
 import echo.echome.dto.ReqCreateMember;
-import echo.echome.dto.ReqMemberChat;
 import echo.echome.dto.ReqUpdateMember;
 import echo.echome.dto.ResAllAnswers;
 import echo.echome.dto.ResCreateMember;
@@ -120,10 +119,10 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public String makeContext(ReqMemberChat request) {
+    public String makeContext(Long memberId) {
         StringBuilder context = new StringBuilder();
 
-        List<Answer> allAnswer = answerRepository.findAllByMemberId(request.getMemberId());
+        List<Answer> allAnswer = answerRepository.findAllByMemberId(memberId);
 
         int cnt = 1;
         for (Answer answer : allAnswer){

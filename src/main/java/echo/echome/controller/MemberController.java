@@ -69,10 +69,10 @@ public class MemberController {
         return ResponseEntity.ok("회원 정보 업데이트 완료.");
     }
 
-    @GetMapping("/chat")
-    public ResponseEntity<String> getAllAnswersOfMember(@RequestBody ReqMemberChat request) {
+    @GetMapping("/chat/{memberId}")
+    public ResponseEntity<String> getAllAnswersOfMember(@PathVariable("memberId") Long memberId) {
 
-        String context = memberService.makeContext(request);
+        String context = memberService.makeContext(memberId);
         return ResponseEntity.ok().body("{\"context\": \"" + context + "\"}");
     }
 

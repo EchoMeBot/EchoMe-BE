@@ -20,7 +20,7 @@ public interface MemberService {
 
     List<ResAllAnswers> getAllAnswers(Long memberId);
 
-    String makeContext(ReqMemberChat request);
+    String makeContext(Long memberId);
 
     /**
      * 회원이 한 모든 질문, 답변 List 불러오기
