@@ -70,10 +70,11 @@ public class MemberController {
     }
 
     @GetMapping("/chat/{memberId}")
-    public ResponseEntity<String> getAllAnswersOfMember(@PathVariable("memberId") Long memberId) {
+    public ResponseEntity<ResMakeContext> getAllAnswersOfMember(@PathVariable("memberId") Long memberId) {
 
-        String context = memberService.makeContext(memberId);
-        return ResponseEntity.ok().body("{\"context\": \"" + context + "\"}");
+        ResMakeContext context = memberService.makeContext(memberId);
+        log.info(context.getContext());
+        return ResponseEntity.ok().body(context);
     }
 
     @GetMapping("/answers")

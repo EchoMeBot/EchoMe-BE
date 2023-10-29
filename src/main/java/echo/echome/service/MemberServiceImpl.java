@@ -4,6 +4,7 @@ import echo.echome.dto.ReqCreateMember;
 import echo.echome.dto.ReqUpdateMember;
 import echo.echome.dto.ResAllAnswers;
 import echo.echome.dto.ResCreateMember;
+import echo.echome.dto.ResMakeContext;
 import echo.echome.dto.ResMemberInfo;
 import echo.echome.entity.Answer;
 import echo.echome.entity.Member;
@@ -119,7 +120,7 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public String makeContext(Long memberId) {
+    public ResMakeContext makeContext(Long memberId) {
         StringBuilder context = new StringBuilder();
 
         List<Answer> allAnswer = answerRepository.findAllByMemberId(memberId);
@@ -140,7 +141,9 @@ public class MemberServiceImpl implements MemberService{
 
             cnt++;
         }
-        return context.toString();
+        return ResMakeContext.builder()
+                .context(context.toString())
+                .build();
     }
 
     @Override
