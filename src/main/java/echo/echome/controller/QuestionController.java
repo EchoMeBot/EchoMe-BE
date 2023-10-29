@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/questions")
-@CrossOrigin
+//@CrossOrigin
 public class QuestionController {
 
     private final QuestionService questionService;
