@@ -1,5 +1,6 @@
 package echo.echome.dto;
 
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,4 +15,5 @@ public class ResMemberInfo {
     private Long memberId;
     private String email;
     private String name;
+    private UUID unique;
 }

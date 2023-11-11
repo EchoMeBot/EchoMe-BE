@@ -38,7 +38,9 @@ public class SecurityConfig implements WebMvcConfigurer {
 			.requestMatchers(
 				new AntPathRequestMatcher("/v1/members/create"),
 				new AntPathRequestMatcher("/v1/members/login"),
-				new AntPathRequestMatcher("/v1/members/reissue")
+				new AntPathRequestMatcher("/v1/members/reissue"),
+				new AntPathRequestMatcher("/v1/chats/*")
+
 //				PathRequest.toH2Console()
 			).permitAll()
 			.anyRequest().authenticated()

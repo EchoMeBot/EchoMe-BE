@@ -4,6 +4,7 @@ import echo.echome.dto.*;
 import echo.echome.utils.Token;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface MemberService {
 
@@ -30,4 +31,8 @@ public interface MemberService {
     List<ResAllAnswers> getAllAnswersByMemberId(String accessToken);
 
     void updateMember(String accessToken,ReqUpdateMember request);
+
+    ResMemberLink getUniqueLink(String accessToken);
+
+    ResMakeContext makeContextByUUID(UUID memberUUID);
 }

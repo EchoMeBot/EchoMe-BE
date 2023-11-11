@@ -19,7 +19,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/members")
-//@CrossOrigin
 public class MemberController {
 
     private final MemberService memberService;
@@ -83,6 +82,14 @@ public class MemberController {
         String accessToken = authorizationHeader.replace("Bearer ","");
         List<ResAllAnswers> allAnswersByMemberId = memberService.getAllAnswersByMemberId(accessToken);
         return ResponseEntity.status(HttpStatus.OK).body(allAnswersByMemberId);
+    }
+
+    @GetMapping("/link")
+    public ResponseEntity<?> getCustomerLink(@RequestHeader("Authorization") String authorizationHeader){
+
+        String accessToken = authorizationHeader.replace("Bearer ","");
+        ResMemberLink uniqueLink = memberService.getUniqueLink(accessToken);
+        return ResponseEntity.status(HttpStatus.OK).body(uniqueLink);
     }
 
 }

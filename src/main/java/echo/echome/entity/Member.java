@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,6 +44,9 @@ public class Member {
 
     @Column(name = "refreshToken")
     private String refreshToken;
+
+    @Column(name = "unique_link")
+    private UUID unique;
 
 
     public void updateRefreshToken(String refreshToken){
