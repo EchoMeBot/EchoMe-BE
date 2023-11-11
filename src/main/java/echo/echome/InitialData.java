@@ -50,8 +50,18 @@ public class InitialData {
                     new ReqNewQuestion(1L,"좋아하는 음식이 뭐야?"),
                     new ReqNewQuestion(2L,"좋아하는 음악이 뭐야?"),
                     new ReqNewQuestion(3L,"취미가 뭐야?"),
-                    new ReqNewQuestion(4L,"키가 몇이야?"),
-                    new ReqNewQuestion(5L,"몇 살이야?")
+                    new ReqNewQuestion(4L,"키가 몇cm야?"),
+                    new ReqNewQuestion(5L,"몇 살이야?"),
+                    new ReqNewQuestion(6L,"MBTI가 뭐야?"),
+                    new ReqNewQuestion(7L,"다니는 학교가 어디야?"),
+                    new ReqNewQuestion(8L,"어디에 살아?"),
+                    new ReqNewQuestion(9L,"성별은?"),
+                    new ReqNewQuestion(10L,"아무일 없이 쉬는날엔 뭐해?"),
+                    new ReqNewQuestion(11L,"연애중이니?"),
+                    new ReqNewQuestion(12L, "가고 싶은 여행지 있어?"),
+                    new ReqNewQuestion(13L,"전공은 뭐야?"),
+                    new ReqNewQuestion(14L, "깻잎논쟁에 찬성해 반대해?"),
+                    new ReqNewQuestion(15L,"면vs밥 뭐가 더 좋아?")
 
             );
 
