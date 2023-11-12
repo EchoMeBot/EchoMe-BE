@@ -54,7 +54,7 @@ public class MemberController {
     }
 
     @GetMapping("/info")
-    public ResponseEntity<?> getMemberInfo(@RequestHeader("Auhorization") String authorizationHeader){
+    public ResponseEntity<?> getMemberInfo(@RequestHeader("Authorization") String authorizationHeader){
         String accessToken = authorizationHeader.replace("Bearer ", "");
         ResMemberInfo memberInfo = memberService.getMemberInfo(accessToken);
         return ResponseEntity.ok(memberInfo);
