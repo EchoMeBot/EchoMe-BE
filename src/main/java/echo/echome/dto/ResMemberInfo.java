@@ -15,5 +15,6 @@ public class ResMemberInfo {
     private Long memberId;
     private String email;
     private String name;
+    private String phoneNum;
     private UUID unique;
 }
