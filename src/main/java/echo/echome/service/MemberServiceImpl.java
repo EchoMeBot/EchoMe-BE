@@ -97,6 +97,7 @@ public class MemberServiceImpl implements MemberService {
                 .memberId(findMember.getId())
                 .email(email)
                 .name(findMember.getName())
+                .phoneNum(findMember.getPhoneNum())
                 .unique(findMember.getUnique())
                 .build();
     }
